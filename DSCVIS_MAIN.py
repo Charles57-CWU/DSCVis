@@ -1,49 +1,57 @@
+"""
+DSV_MAIN.py is the main python script to execute and holds information related to the GUI and dataset
+
+Author: Charles Recaido
+Program: MSc in Computational Science
+School: Central Washington University
+"""
+
 from PyQt5 import QtWidgets
 from PyQt5 import uic
-from PyQt5 import Qt
-import sys
-from csv import writer
 import numpy as np
+import sys
+from PyQt5 import sip
 
 import GET_DATA
 import DATA_DISPLAY
 import CLASS_TABLE
 import ATTRIBUTE_TABLE
 import PLOT_CONTEXT
-import UPDATE_CLASS_ORDER
 import CLIPPING
+import WARNINGS
 
 
 class Dataset(object):
     # dataset info
-    name = None
+    name = ''
     dataframe = None
 
     # class information
-    class_count = None
+    class_count = 0
     count_per_class = []
     class_names = []
     class_colors = []
     # attribute information
-    attribute_count = None
+    attribute_count = 0
     attribute_names = []
-    active_attributes = []
-    vertex_count = None
-    attribute_alpha = 255
+    attribute_alpha = 255  # for attribute slider
     # sample information
-    sample_count = None
-    clipped_samples = []
-    vertex_in = []
-    last_vertex_in = []
+    sample_count = 0
+    clipped_samples = []  # for line clip option
+    vertex_in = []  # for vertex clip option
+    last_vertex_in = []  # for last vertex clip option
 
     # plot information
-    plot_type = None
+    plot_type = ''
     positions = []
     axis_positions = []
-    axis_count = None
+    axis_count = 0
+    vertex_count = 0  # number of vertices depends on plot type
 
+    active_attributes = []  # show/hide markers by attribute
     active_classes = []  # show/hide classes
-    active_markers = []  # show/hide markers
+    active_markers = []  # show/hide markers by class
+
     class_order = []  # choose which class is on top
     attribute_order = []  # choose attribute order (requires running graph construction algorithm again)
 
@@ -56,6 +64,9 @@ class Ui(QtWidgets.QMainWindow):
         self.plot_layout = None
         self.plot_widget = None
         self.data = None
+        self.data_uploaded = False
+
+        self.warnings = WARNINGS.getWarning()
 
         # ====================================== buttons ======================================
         # file upload button
@@ -93,16 +104,39 @@ class Ui(QtWidgets.QMainWindow):
 
         self.attribute_slide.valueChanged.connect(self.attr_slider)
 
+        self.pc_checked = self.findChild(QtWidgets.QRadioButton, 'pcCheck')
+        self.spc_checked = self.findChild(QtWidgets.QRadioButton, 'spcCheck')
+        self.dsc1_checked = self.findChild(QtWidgets.QRadioButton, 'dsc1Check')
+        self.dsc2_checked = self.findChild(QtWidgets.QRadioButton, 'dsc2Check')
+
         # ====================================== tables and text boxes ======================================
         # dataset information text box
         self.dataset_textbox = self.findChild(QtWidgets.QTextBrowser, 'datasetInfoBrowser')
         self.clipped_area_textbox = self.findChild(QtWidgets.QTextBrowser, 'attributeBrowser')
 
         # tables
-        self.class_table_layout = self.findChild(QtWidgets.QVBoxLayout, 'verticalLayout_7')
+        self.class_table_layout = self.findChild(QtWidgets.QVBoxLayout, 'classTableLayout')
         self.class_table = None
-        self.attribute_table_layout = self.findChild(QtWidgets.QVBoxLayout, 'verticalLayout_5')
+        self.class_pl = self.findChild(QtWidgets.QTableWidget, 'classTablePlaceholder')
+        self.class_pl_exists = True
+
+        self.check_classes = self.findChild(QtWidgets.QPushButton, 'uncheckClasses')
+        self.check_classes.clicked.connect(self.check_all_class)
+
+        self.uncheck_classes = self.findChild(QtWidgets.QPushButton, 'checkClasses')
+        self.uncheck_classes.clicked.connect(self.uncheck_all_class)
+
+        self.attribute_table_layout = self.findChild(QtWidgets.QVBoxLayout, 'attributeTableLayout')
         self.attribute_table = None
+        self.attribute_pl = self.findChild(QtWidgets.QTableWidget, 'attributeTablePlaceholder')
+        self.attribute_pl_exists = True
+
+        self.check_attributes = self.findChild(QtWidgets.QPushButton, 'checkAttributes')
+        self.check_attributes.clicked.connect(self.check_all_attr)
+
+        self.uncheck_attributes = self.findChild(QtWidgets.QPushButton, 'uncheckAttributes')
+        self.uncheck_attributes.clicked.connect(self.uncheck_all_attr)
+
         # for swapping cells
         self.cell_swap = QtWidgets.QTableWidget()
         self.cell_swap.__class__.dropEvent = self.table_swap
@@ -110,50 +144,98 @@ class Ui(QtWidgets.QMainWindow):
         # ====================================== plot module ======================================
         self.plot_layout = self.findChild(QtWidgets.QVBoxLayout, 'plotDisplay')
 
-        place_holder = self.findChild(QtWidgets.QWidget, 'placeHolder')
-        self.plot_layout.removeWidget(place_holder)
+        self.pl = self.findChild(QtWidgets.QWidget, 'placeHolderWidget')
+        self.pl_exists = True
 
     def upload_dataset(self):
-        self.class_table_layout.removeWidget(self.class_table)
-        self.attribute_table_layout.removeWidget(self.attribute_table)
-
-        self.data = Dataset()
+        if self.data_uploaded:
+            del self.data
+            self.data = Dataset()
+        else:
+            self.data = None
+            self.data = Dataset()
         filename = QtWidgets.QFileDialog.getOpenFileName(self, 'Open File')
+        if filename[0] == '':
+            return
+
+        # GUI changes for changing datasets
+        if self.data_uploaded:
+            self.plot_layout.removeWidget(self.plot_widget)
+            sip.delete(self.plot_widget)
+            self.plot_widget = None
+            self.plot_layout.addWidget(self.pl)
+
+            self.class_table_layout.removeWidget(self.class_table)
+            print(self.class_table_layout.count())
+            print(self.class_table.rowCount())
+            sip.delete(self.class_table)
+            self.class_table = None
+            self.class_table_layout.addWidget(self.class_pl)
+            self.class_pl_exists = True
+
+            self.attribute_table_layout.removeWidget(self.attribute_table)
+            sip.delete(self.attribute_table)
+            self.attribute_table = None
+            self.attribute_table_layout.addWidget(self.attribute_pl)
+            self.attribute_pl_exists = True
+
+            self.pl_exists = True
 
         GET_DATA.GetData(self.data, filename[0])
         DATA_DISPLAY.DisplayData(self.data, self.dataset_textbox)
-
         self.class_table = CLASS_TABLE.ClassTable(self.data, parent=self)
-        self.class_table_layout.addWidget(self.class_table)
+        self.data_uploaded = True
 
     # ====================================== create plots ======================================
     def create_plot(self):
-        self.plot_layout.removeWidget(self.plot_widget)
-        self.attribute_table_layout.removeWidget(self.attribute_table)
+        # remove initial placeholder
+
+        if not self.pl_exists:
+            self.plot_layout.removeWidget(self.plot_widget)
+            self.plot_layout.addWidget(self.pl)
+            self.pl_exists = True
+
         self.data.positions = []
 
-        pc_checked = self.findChild(QtWidgets.QRadioButton, 'pcCheck')
-        if pc_checked.isChecked():
+        if self.pc_checked.isChecked():
             self.data.plot_type = 'PC'
-            self.plot_widget = PLOT_CONTEXT.MakePlot(self.data)
+            self.plot_widget = PLOT_CONTEXT.MakePlot(self.data, parent=self)
 
-        dsc1_checked = self.findChild(QtWidgets.QRadioButton, 'dsc1Check')
-        if dsc1_checked.isChecked():
+        if self.dsc1_checked.isChecked():
             self.data.plot_type = 'DSC1'
-            self.plot_widget = PLOT_CONTEXT.MakePlot(self.data)
+            self.plot_widget = PLOT_CONTEXT.MakePlot(self.data, parent=self)
 
-        dsc2_checked = self.findChild(QtWidgets.QRadioButton, 'dsc2Check')
-        if dsc2_checked.isChecked():
+        if self.dsc2_checked.isChecked():
+            if self.data.attribute_count % 2 != 0:
+                print('This plot requires an even feature count.')
+                return
             self.data.plot_type = 'DSC2'
-            self.plot_widget = PLOT_CONTEXT.MakePlot(self.data)
+            self.plot_widget = PLOT_CONTEXT.MakePlot(self.data, parent=self)
 
-        spc_checked = self.findChild(QtWidgets.QRadioButton, 'spcCheck')
-        if spc_checked.isChecked():
+        if self.spc_checked.isChecked():
+            if self.data.attribute_count % 2 != 0:
+                print('This plot requires an even feature count.')
+                return
             self.data.plot_type = 'SPC'
-            self.plot_widget = PLOT_CONTEXT.MakePlot(self.data)
+            self.plot_widget = PLOT_CONTEXT.MakePlot(self.data, parent=self)
+
+        if self.class_pl_exists:
+            self.class_table_layout.removeWidget(self.class_pl)
+            self.class_table_layout.addWidget(self.class_table)
+            self.class_pl_exists = False
+
+        if self.attribute_pl_exists:
+            self.attribute_table_layout.removeWidget(self.attribute_pl)
+            self.attribute_pl_exists = False
+        else:
+            self.attribute_table_layout.removeWidget(self.attribute_table)
 
         self.attribute_table = ATTRIBUTE_TABLE.AttributeTable(self.data, parent=self)
         self.attribute_table_layout.addWidget(self.attribute_table)
+
+        if self.pl_exists:
+            self.plot_layout.removeWidget(self.pl)
+            self.pl_exists = False
 
         self.plot_layout.addWidget(self.plot_widget)
 
@@ -204,6 +286,18 @@ class Ui(QtWidgets.QMainWindow):
     # function to refresh plot
     def refresh(self):
         self.plot_widget.update()
+
+    def check_all_attr(self):
+        ATTRIBUTE_TABLE.reset_checkmarks(self.attribute_table, self.data.vertex_count, self.data.plot_type)
+
+    def check_all_class(self):
+        CLASS_TABLE.reset_checkmarks(self.class_table, self.data.class_count)
+
+    def uncheck_all_attr(self):
+        ATTRIBUTE_TABLE.uncheck_checkmarks(self.attribute_table, self.data.vertex_count, self.data.plot_type)
+
+    def uncheck_all_class(self):
+        CLASS_TABLE.uncheck_checkmarks(self.class_table, self.data.class_count)
 
     # function to get alpha value for hidden attributes
     def attr_slider(self):

@@ -35,6 +35,16 @@ def reset_checkmarks(table, count, plot_type):
             cell.setCheckState(Qt.CheckState.Checked)
 
 
+def uncheck_checkmarks(table, count, plot_type):
+    for idx in range(count):
+        if plot_type == 'SPC' or plot_type == 'DSC2':
+            cell = table.cellWidget(idx*2, 1)
+            cell.setCheckState(Qt.CheckState.Unchecked)
+        else:
+            cell = table.cellWidget(idx, 1)
+            cell.setCheckState(Qt.CheckState.Unchecked)
+
+
 class AttributeTable(QtWidgets.QTableWidget):
     def __init__(self, dataset, parent=None):
         super(AttributeTable, self).__init__(parent)
@@ -58,7 +68,7 @@ class AttributeTable(QtWidgets.QTableWidget):
 
         counter = 0
         for ele in dataset.attribute_names:
-            item = QtWidgets.QTableWidgetItem(str(ele) + ' - (X' + str(counter) + ')')
+            item = QtWidgets.QTableWidgetItem(str(ele))
             self.setItem(counter, 0, item)
 
             if self.data.plot_type == 'SPC' or self.data.plot_type == 'DSC2':

@@ -3,12 +3,12 @@ import pandas as pd
 from csv import writer
 import os
 
-# Defining region codes
-INSIDE = 0  # 0000
-LEFT = 1  # 0001
-RIGHT = 2  # 0010
-BOTTOM = 4  # 0100
-TOP = 8  # 1000
+# region codes for cohen-sutherland
+INSIDE = 0
+LEFT = 1
+RIGHT = 2
+BOTTOM = 4
+TOP = 8
 
 
 def clip_display(textbox, total_sample):
@@ -91,8 +91,10 @@ def clip_files(dataset, textbox):
 
     output_train1.close()
     output_test1.close()
+
     output_train2.close()
     output_test2.close()
+
     output_train3.close()
     output_test3.close()
 
@@ -204,15 +206,19 @@ def clip_samples(positions, rect, dataset):
     for data_class in positions:
         for sample in data_class:
             for i in range(dataset.vertex_count):
+                # line clip
                 if i < dataset.vertex_count - 1:
                     is_clipped = cohen_sutherland_clip(sample[2 * i], sample[2 * i + 1], sample[2 * i + 2],
                                                        sample[2 * i + 3], min_max)
                     if is_clipped:
                         dataset.clipped_samples[cnt] = True
+
+                    # vertex clip
                     is_inside = vertex_check(sample[2 * i], sample[2 * i + 1], min_max)
                     if is_inside:
                         dataset.vertex_in[cnt] = True
                 else:
+                    # last vertex (and vertex) clip
                     is_inside = vertex_check(sample[2 * i], sample[2 * i + 1], min_max)
                     if is_inside:
                         dataset.vertex_in[cnt] = True

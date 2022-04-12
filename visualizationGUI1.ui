@@ -81,7 +81,7 @@
           </item>
          </layout>
         </item>
-        <item>
+        <item alignment="Qt::AlignHCenter">
          <widget class="QTextBrowser" name="datasetInfoBrowser">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
@@ -131,7 +131,7 @@
           </item>
          </layout>
         </item>
-        <item>
+        <item alignment="Qt::AlignHCenter">
          <widget class="QTextBrowser" name="attributeBrowser">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
@@ -170,16 +170,6 @@
            </widget>
           </item>
          </layout>
-        </item>
-        <item>
-         <widget class="QCheckBox" name="axesCheck">
-          <property name="text">
-           <string>Show Axes</string>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-         </widget>
         </item>
         <item>
          <widget class="QFrame" name="frame_3">
@@ -245,6 +235,16 @@
              </item>
             </layout>
            </item>
+           <item>
+            <widget class="QCheckBox" name="axesCheck">
+             <property name="text">
+              <string>Show Axes</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
           </layout>
          </widget>
         </item>
@@ -253,7 +253,7 @@
       <item>
        <layout class="QVBoxLayout" name="plotDisplay">
         <item>
-         <widget class="QWidget" name="placeHolder" native="true">
+         <widget class="QWidget" name="placeHolderWidget" native="true">
           <property name="minimumSize">
            <size>
             <width>800</width>
@@ -266,8 +266,8 @@
       </item>
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_10">
-        <item>
-         <widget class="QFrame" name="frame_2">
+        <item alignment="Qt::AlignHCenter">
+         <widget class="QFrame" name="attributeFrame">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -285,12 +285,52 @@
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_9">
            <item>
-            <layout class="QVBoxLayout" name="verticalLayout_5">
+            <layout class="QVBoxLayout" name="attributeFrameLayout">
              <item>
-              <widget class="QTableWidget" name="tableWidget"/>
+              <layout class="QVBoxLayout" name="attributeTableLayout">
+               <item>
+                <widget class="QTableWidget" name="attributeTablePlaceholder"/>
+               </item>
+              </layout>
              </item>
              <item>
+              <layout class="QHBoxLayout" name="horizontalLayout">
+               <item>
+                <widget class="QPushButton" name="checkAttributes">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="text">
+                  <string>Check All</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="uncheckAttributes">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="text">
+                  <string>Uncheck All</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item alignment="Qt::AlignHCenter">
               <widget class="QPushButton" name="replotFeatureButton">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
                <property name="text">
                 <string>Replot Features</string>
                </property>
@@ -314,8 +354,8 @@
           </layout>
          </widget>
         </item>
-        <item>
-         <widget class="QFrame" name="frame">
+        <item alignment="Qt::AlignHCenter">
+         <widget class="QFrame" name="classFrame">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -333,11 +373,41 @@
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_8">
            <item>
-            <layout class="QVBoxLayout" name="verticalLayout_7">
+            <layout class="QVBoxLayout" name="classFrameLayout">
              <item>
-              <layout class="QHBoxLayout" name="horizontalLayout">
+              <layout class="QVBoxLayout" name="classTableLayout">
                <item>
-                <widget class="QTableWidget" name="tableWidget_2"/>
+                <widget class="QTableWidget" name="classTablePlaceholder"/>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_6">
+               <item>
+                <widget class="QPushButton" name="uncheckClasses">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="text">
+                  <string>Check All</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="checkClasses">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="text">
+                  <string>Uncheck All</string>
+                 </property>
+                </widget>
                </item>
               </layout>
              </item>

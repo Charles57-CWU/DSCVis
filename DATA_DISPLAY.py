@@ -3,7 +3,7 @@ class DisplayData:
         # display class data
         data_info_string = ('Dataset Name: ' + dataset.name +
                             '\n\n' + 'Number of Classes: ' + str(dataset.class_count) +
-                            '\n\n' + 'Number of Features: ' + str(dataset.attribute_count) +
+                            '\n\n' + 'Number of Attributes: ' + str(dataset.attribute_count) +
                             '\n\n' + 'Number of Samples: ' + str(dataset.sample_count))
 
         # loop through class names

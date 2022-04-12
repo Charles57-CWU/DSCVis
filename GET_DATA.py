@@ -26,16 +26,17 @@ class GetData:
         class_color_array = colors.colors_array
 
         cnt = 0  # counter for color array
+        dataset.class_colors = []
         for i in range(dataset.class_count):
             # repeat colors for more than 9 classes, class colors can be changed interactively later
             if i % 9 == 0:
                 cnt = 0
             # make all classes and markers initially active
-            dataset.active_markers.append(True)
-            dataset.active_classes.append(True)
             # add colors and update counter
             dataset.class_colors.append(class_color_array[cnt])
             cnt += 1
+        dataset.active_markers = np.repeat(True, dataset.class_count)
+        dataset.active_classes = np.repeat(True, dataset.class_count)
 
         # get attribute information
         dataset.attribute_names = df.columns.tolist()[:-1]
