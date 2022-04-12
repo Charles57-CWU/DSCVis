@@ -1,16 +1,15 @@
-# Multi-dimensional-Visualization-in-2D
+# DSCViz
 For CS Masters Program at CWU
 <pre>
 About:
 This application displays multi-dimensional data in 2D.
-This program will visualize up to ten classes (for now)
 
 --Dataset Information:
-Dataset must be in .txt or .csv format (always)
-Dataset must include headers (always)
-Dataset should only include class and feature columns (for now?)
-Dataset class header must be labeled as "class" without quotations (for now)
-Dataset features besides "class" must be in numeric representation (for now)
+Dataset must be in .txt or .csv format
+Dataset must include headers 
+Dataset should only include class and feature columns
+Dataset class header must be labeled as "class" without quotations
+Dataset features besides "class" must be in numeric representation
 
 --Example dataset:
 length,width,height,class
