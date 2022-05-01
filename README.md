@@ -48,7 +48,7 @@ Breast Cancer Wisconsin (Original) dataset - https://archive.ics.uci.edu/ml/data
 </pre>
 
 
-![window](/images/APP_WINDOW.png)
+![window](/Images/APP_WINDOW.png)
 
 
 MNIST on DSC2 using t-SNE as scaffold origin points
