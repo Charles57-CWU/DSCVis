@@ -1,8 +1,9 @@
 # DSCViz
 For CS Masters Program at CWU
+
 <pre>
 About:
-This application displays multi-dimensional data in 2D.
+This application displays multi-dimensional data in 2D using OpenGL for rendering. The plot can be dragged and zoomed in/out. Classes can be hidden, as well as specified attribute markers. A box-clipping algorithm is included to clip lines and return samples of the dataset.
 
 --Dataset Information:
 Dataset must be in .txt or .csv format
