@@ -1,14 +1,16 @@
 # DSCViz
 For CS Masters Program at CWU
 
-<pre>
 About:
 This application displays multi-dimensional data in 2D using OpenGL for rendering. The plot can be dragged and zoomed in/out. Classes can be hidden, as well as specified attribute markers. A box-clipping algorithm is included to clip lines and return samples of the dataset.
 
+This visualization tool features four plots, including Parallel Coordinates, Paired Coordinates, DSC1, and DSC2. Additional multidimensional plots can be added with ease as the plot context class uses general vertices.
+
+<pre>
 --Dataset Information:
 Dataset must be in .txt or .csv format
 Dataset must include headers 
-Dataset should only include class and feature columns
+Dataset should only include class and attribute columns
 Dataset class header must be labeled as "class" without quotations
 Dataset features besides "class" must be in numeric representation
 
