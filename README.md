@@ -54,7 +54,7 @@ Breast Cancer Wisconsin (Original) dataset - https://archive.ics.uci.edu/ml/data
 ![window](/Images/APP_WINDOW.png)
 
 
-MNIST on DSC2 using t-SNE as scaffold origin points
+MNIST on DSC2 using t-SNE as scaffold origin points. Image contains 3,120,000 data points (60,000 * 52). 
 ![mnist](/Images/MNIST.png)
 
 Showing Zoom and Drag capabilities of App
