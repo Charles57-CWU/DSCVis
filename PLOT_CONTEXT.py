@@ -9,6 +9,17 @@ import random
 import GCA
 import CLIPPING
 
+poly_color = [[255, 0, 0],  # red
+              [0, 255, 0],  # green
+              [0, 0, 255],  # blue
+              [255, 108, 221],  # purple
+              [255, 0, 0],
+              [128, 0, 128],
+              [0, 255, 255],
+              [233, 20, 20],
+              [255, 233, 0],
+              [233, 233, 233]]
+
 
 def drawPolyLines(dataset, class_vao):
     # loop through classes
@@ -23,6 +34,20 @@ def drawPolyLines(dataset, class_vao):
             # drawing
             for j in range(0, len(dataset.positions[i]), dataset.vertex_count):
                 glDrawArrays(GL_LINE_STRIP, j, dataset.vertex_count)
+            # drawing
+            #============================special =============================================================
+            k = 0
+            # for j in range(0, len(dataset.positions[i]), dataset.vertex_count):
+            #     k = 0
+            #     for m in range(1, dataset.vertex_count):
+            #         color = poly_color[k]
+            #         glColor3ub(color[0], color[1], color[2])
+            #         glBegin(GL_LINES)
+            #         glVertex2f(dataset.positions[i][j+m][0], dataset.positions[i][j+m][1])
+            #         glVertex2f(dataset.positions[i][j+m-1][0], dataset.positions[i][j+m-1][1])
+            #         glEnd()
+            #         k += 1
+
             # unbind
             glBindVertexArray(0)
 

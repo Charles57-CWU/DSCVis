@@ -13,8 +13,11 @@ class DSC2Info:
         for i in range(dataset.attribute_count):
             working_df[working_df.columns[i]] = scaler.fit_transform(working_df[[working_df.columns[i]]])
 
-        # space = 1.0 / dataset.vertex_count
-        space_array = np.repeat(0.003, repeats=dataset.attribute_count)
+        #space = 1.0 / dataset.vertex_count
+        space_array = np.repeat(0.05, repeats=dataset.attribute_count)
+        # for i in range(dataset.attribute_count):
+        #     if i % 2 == 1:
+        #         space_array[i] = 0.005
         space_array[0] = 1
         space_array[1] = 1
 
@@ -28,10 +31,11 @@ class DSC2Info:
         # working_df[dataset.attribute_names] = scaler.fit_transform(working_df[dataset.attribute_names])
         # =====================================================================================================
         print(dataset.vertex_count)
-        angle_array = np.repeat(-90, dataset.vertex_count)
-        for i in range(dataset.vertex_count):
-            if i % 2 == 1:
-                angle_array[i] = 180
+        angle_array = np.repeat(0, dataset.vertex_count)
+        t = 0
+        # for i in range(dataset.vertex_count):
+        #         angle_array[i] = 0 - t
+        #         t -= 10
         angle_array[0] = 0
         angle_array[1] = 0
         # angle_array[2] = 45
