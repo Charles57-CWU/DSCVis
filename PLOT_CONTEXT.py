@@ -1,3 +1,11 @@
+"""
+PLOT_CONTEXT.py executes various OpenGL class to create plot
+
+Author: Charles Recaido
+Program: MSc in Computational Science
+School: Central Washington University
+"""
+
 from OpenGL.GL import *
 import OpenGL.arrays.vbo as glvbo
 from PyQt5.QtWidgets import *

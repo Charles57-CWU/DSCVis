@@ -1,3 +1,11 @@
+"""
+CLASS_TABLE.py executes holds the structure, functions, and creation of the class table
+
+Author: Charles Recaido
+Program: MSc in Computational Science
+School: Central Washington University
+"""
+
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtGui import QColor, QBrush

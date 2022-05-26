@@ -90,8 +90,9 @@ class Ui(QtWidgets.QMainWindow):
         self.test_button = self.findChild(QtWidgets.QPushButton, 'testButton')
         self.test_button.clicked.connect(self.test)
 
-        # color test button
-        self.color_button = self.findChild(QtWidgets.QPushButton, 'recenterButton')
+        # recenter button
+        self.recenter_button = self.findChild(QtWidgets.QPushButton, 'recenterButton')
+        self.recenter_button.clicked.connect(self.recenter_plot)
 
         # color test button
         self.remove_clip_button = self.findChild(QtWidgets.QPushButton, 'removeClipButton')
@@ -343,6 +344,22 @@ class Ui(QtWidgets.QMainWindow):
             self.warnings.noDataWarning()
             return
         CLASS_TABLE.uncheck_checkmarks(self.class_table, self.data.class_count)
+
+    def recenter_plot(self):
+        if not self.data_uploaded:
+            self.warnings.noDataWarning()
+            return
+
+        if not self.data.plot_type:
+            return
+
+        # for zooming
+        self.plot_widget.m_left = -1.125
+        self.plot_widget.m_right = 1.125
+        self.plot_widget.m_bottom = -1.125
+        self.plot_widget.m_top = 1.125
+
+        self.refresh()
 
     # function to get alpha value for hidden attributes
     def attr_slider(self):
