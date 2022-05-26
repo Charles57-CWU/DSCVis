@@ -21,6 +21,7 @@ poly_color = [[255, 0, 0],  # red
               [233, 233, 233]]
 
 
+# draw polylines
 def drawPolyLines(dataset, class_vao):
     # loop through classes
     for i in range(dataset.class_count):
@@ -31,12 +32,12 @@ def drawPolyLines(dataset, class_vao):
             # colors of the class
             color = dataset.class_colors[i]
             glColor3ub(color[0], color[1], color[2])
-            # drawing
+            # draw polyline
             for j in range(0, len(dataset.positions[i]), dataset.vertex_count):
                 glDrawArrays(GL_LINE_STRIP, j, dataset.vertex_count)
-            # drawing
-            #============================special =============================================================
-            k = 0
+
+            # ============================special =============================================================
+            # k = 0
             # for j in range(0, len(dataset.positions[i]), dataset.vertex_count):
             #     k = 0
             #     for m in range(1, dataset.vertex_count):
@@ -51,7 +52,7 @@ def drawPolyLines(dataset, class_vao):
             # unbind
             glBindVertexArray(0)
 
-
+# draw markers
 def drawMarkers(dataset, marker_vao):
     # loop through classes
 
@@ -79,7 +80,7 @@ def drawMarkers(dataset, marker_vao):
                 glPointSize(5)
     glDisable(GL_BLEND)
 
-
+# draw axes
 def drawAxes(dataset, axis_vao):
     # positions of the class
     glBindVertexArray(axis_vao)
@@ -90,7 +91,7 @@ def drawAxes(dataset, axis_vao):
     # unbind
     glBindVertexArray(0)
 
-
+# draw box for box clipping
 def drawBox(all_rect):
     if all_rect:
         for r in all_rect:
@@ -205,7 +206,8 @@ class MakePlot(QOpenGLWidget):
         setViewFrustum(self.m_left, self.m_right, self.m_bottom, self.m_top)
         drawPolyLines(self.data, self.line_vao)
         drawMarkers(self.data, self.marker_vao)
-        drawAxes(self.data, self.axis_vao)
+        if self.data.axis_on:
+            drawAxes(self.data, self.axis_vao)
 
         drawBox(self.all_rect)
 

@@ -1,3 +1,11 @@
+"""
+PC.py uses a dataframe of the dataset to calculate vertices for the Parallel Coordinate (PC) plot
+
+Author: Charles Recaido
+Program: MSc in Computational Science
+School: Central Washington University
+"""
+
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 import time

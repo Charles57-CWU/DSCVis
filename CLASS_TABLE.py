@@ -1,22 +1,7 @@
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtGui import QColor, QBrush
-import numpy as np
 
-
-# def show_hide_classes(dataset, class_table, plot):
-#     for i in range(dataset.class_count):
-#         if class_table.item(i, 1).checkState() == Qt.CheckState.Checked:
-#             dataset.active_classes[i] = True
-#         else:
-#             dataset.active_classes[i] = False
-#
-#         if class_table.item(i, 2).checkState() == Qt.CheckState.Checked:
-#             dataset.active_markers[i] = True
-#         else:
-#             dataset.active_markers[i] = False
-#
-#         plot.update()
 
 def reset_checkmarks(table, count):
     for idx in range(count):
@@ -48,10 +33,6 @@ def table_swap(table, dataset, plot, event):
     table.item(moved_to, 0).setText(from_item)
     table.item(moved_to, 0).setForeground(QBrush(QColor(to_rgb[0], to_rgb[1], to_rgb[2])))
 
-    # place_holder = dataset.class_names[moved_from]
-    # dataset.class_names[moved_from] = dataset.class_names[moved_to]
-    # dataset.class_names[moved_to] = place_holder
-
     place_holder = dataset.class_order[moved_from]
     dataset.class_order[moved_from] = dataset.class_order[moved_to]
     dataset.class_order[moved_to] = place_holder
@@ -62,7 +43,7 @@ def table_swap(table, dataset, plot, event):
 
     plot.update()
 
-
+# main table class
 class ClassTable(QtWidgets.QTableWidget):
     refresh_GUI = pyqtSignal()
 
@@ -109,6 +90,7 @@ class ClassTable(QtWidgets.QTableWidget):
             counter += 1
 
 
+# class button for changing color
 class Button(QtWidgets.QPushButton):
     def __init__(self, row, dataset, refresh, parent=None):
         super(Button, self).__init__(parent=parent)
@@ -127,6 +109,7 @@ class Button(QtWidgets.QPushButton):
         self.data.class_colors[self.index] = [rgb[0], rgb[1], rgb[2]]
 
 
+# class for checkbox in the class table
 class CheckBox(QtWidgets.QCheckBox):
     def __init__(self, row, dataset, refresh, option, parent=None):
         super(CheckBox, self).__init__(parent)

@@ -1,8 +1,13 @@
+"""
+DSC1.py uses a dataframe of the dataset to calculate vertices for the DSC1 plot
+
+Author: Charles Recaido
+Program: MSc in Computational Science
+School: Central Washington University
+"""
+
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
-
-import COLORS
-
 
 class DSC1Info:
     def __init__(self, dataset):

@@ -45,6 +45,7 @@ class Dataset(object):
     plot_type = ''
     positions = []
     axis_positions = []
+    axis_on = True
     axis_count = 0
     vertex_count = 0  # number of vertices depends on plot type
 
@@ -104,10 +105,15 @@ class Ui(QtWidgets.QMainWindow):
 
         self.attribute_slide.valueChanged.connect(self.attr_slider)
 
+        # plot selection
         self.pc_checked = self.findChild(QtWidgets.QRadioButton, 'pcCheck')
         self.spc_checked = self.findChild(QtWidgets.QRadioButton, 'spcCheck')
         self.dsc1_checked = self.findChild(QtWidgets.QRadioButton, 'dsc1Check')
         self.dsc2_checked = self.findChild(QtWidgets.QRadioButton, 'dsc2Check')
+
+        # axes on/off
+        self.show_axes = self.findChild(QtWidgets.QCheckBox, 'axesCheck')
+        self.show_axes.stateChanged.connect(self.axes_func)
 
         # ====================================== tables and text boxes ======================================
         # dataset information text box
@@ -188,8 +194,11 @@ class Ui(QtWidgets.QMainWindow):
 
     # ====================================== create plots ======================================
     def create_plot(self):
-        # remove initial placeholder
+        if not self.data_uploaded:
+            self.warnings.noDataWarning()
+            return
 
+        # remove initial placeholder
         if not self.pl_exists:
             self.plot_layout.removeWidget(self.plot_widget)
             self.plot_layout.addWidget(self.pl)
@@ -246,10 +255,18 @@ class Ui(QtWidgets.QMainWindow):
 
     # function to save clip files
     def test(self):
+        if not self.data_uploaded:
+            self.warnings.noDataWarning()
+            return
+
         CLIPPING.clip_files(self.data, self.clipped_area_textbox)
 
     # function remove clip and reset variables
     def remove_clip(self):
+        if not self.data_uploaded:
+            self.warnings.noDataWarning()
+            return
+
         self.data.clipped_samples = np.zeros(self.data.sample_count)
         self.data.vertex_in = np.zeros(self.data.sample_count)
         self.data.last_vertex_in = np.zeros(self.data.sample_count)
@@ -274,6 +291,10 @@ class Ui(QtWidgets.QMainWindow):
     # function to reorder attributes
     # reordering attributes requires running the GCA again
     def replot_attributes(self):
+        if not self.data_uploaded:
+            self.warnings.noDataWarning()
+            return
+
         self.data.attribute_names.append('class')
         self.data.dataframe = self.data.dataframe[self.data.attribute_names]
 
@@ -283,24 +304,51 @@ class Ui(QtWidgets.QMainWindow):
         ATTRIBUTE_TABLE.reset_checkmarks(self.attribute_table, self.data.vertex_count, self.data.plot_type)
         self.create_plot()
 
+    def axes_func(self):
+        if not self.data_uploaded:
+            self.warnings.noDataWarning()
+            return
+
+        if self.show_axes.isChecked():
+            self.data.axis_on = True
+        else:
+            self.data.axis_on = False
+
+        self.refresh()
+
     # function to refresh plot
     def refresh(self):
         self.plot_widget.update()
 
     def check_all_attr(self):
+        if not self.data_uploaded:
+            self.warnings.noDataWarning()
+            return
         ATTRIBUTE_TABLE.reset_checkmarks(self.attribute_table, self.data.vertex_count, self.data.plot_type)
 
     def check_all_class(self):
+        if not self.data_uploaded:
+            self.warnings.noDataWarning()
+            return
         CLASS_TABLE.reset_checkmarks(self.class_table, self.data.class_count)
 
     def uncheck_all_attr(self):
+        if not self.data_uploaded:
+            self.warnings.noDataWarning()
+            return
         ATTRIBUTE_TABLE.uncheck_checkmarks(self.attribute_table, self.data.vertex_count, self.data.plot_type)
 
     def uncheck_all_class(self):
+        if not self.data_uploaded:
+            self.warnings.noDataWarning()
+            return
         CLASS_TABLE.uncheck_checkmarks(self.class_table, self.data.class_count)
 
     # function to get alpha value for hidden attributes
     def attr_slider(self):
+        if not self.data_uploaded:
+            self.warnings.noDataWarning()
+            return
         value = self.attribute_slide.value()
         self.data.attribute_alpha = value
         self.plot_widget.update()

@@ -1,19 +1,24 @@
+"""
+DSC2.py uses a dataframe of the dataset to calculate vertices for the DSC2 plot
+
+Author: Charles Recaido
+Program: MSc in Computational Science
+School: Central Washington University
+"""
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 
-
+# this class is for finding DSC2 vertices
 class DSC2Info:
     def __init__(self, dataset):
         working_df = dataset.dataframe.copy()
-
-        # =============================================== angle =============================================
 
         # =============================================== scaling =============================================
         scaler = MinMaxScaler((0, 1))
         for i in range(dataset.attribute_count):
             working_df[working_df.columns[i]] = scaler.fit_transform(working_df[[working_df.columns[i]]])
 
-        #space = 1.0 / dataset.vertex_count
+        # space = 1.0 / dataset.vertex_count
         space_array = np.repeat(0.05, repeats=dataset.attribute_count)
         # for i in range(dataset.attribute_count):
         #     if i % 2 == 1:
@@ -38,9 +43,6 @@ class DSC2Info:
         #         t -= 10
         angle_array[0] = 0
         angle_array[1] = 0
-        # angle_array[2] = 45
-        # angle_array[3] = -45
-        # angle_array[4] = 45
 
         for name in dataset.class_names:
             df_name = working_df[working_df['class'] == name]

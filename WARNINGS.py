@@ -16,7 +16,7 @@ class getWarning:
         no_data_message.setIcon(QtWidgets.QMessageBox.Warning)
         no_data_message.setStandardButtons(QtWidgets.QMessageBox.Ok)
 
-        #no_data_message.exec()
+        no_data_message.exec()
 
     def oddFeatureCount(self):
         no_data_message = QtWidgets.QMessageBox()
