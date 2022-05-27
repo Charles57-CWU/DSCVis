@@ -43,6 +43,19 @@ scikit-learn 1.0.1
 QTDesigner
 
 
+-- Functions:
+
+Left click on plot and move mouse to drag the plot.
+
+Scroll the mouse wheel to zoom in/out of the plot.
+
+Right click twice to make a box clipping rectangle. The 1st right click is the upper right corner, and the 2nd right click is the bottom left corner.
+
+The cells in the class and attribute tables can be dragged and dropped to switch their orders.
+
+The slider below the attribute table will change the transparency of the attribute markers that are not selected in the highlight column.
+
+
 --Dataset Links:
 
 Iris dataset - https://archive.ics.uci.edu/ml/datasets/iris
