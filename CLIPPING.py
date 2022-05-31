@@ -35,7 +35,7 @@ def clip_display(textbox, total_sample):
         # loop through class names
         counter = 1
         for ele in class_names:
-            info_string += ('\n\n' + 'Class ' + str(counter) + ' - ' + str(ele) +
+            info_string += ('\n\n' + 'Class ' + str(counter) + ': ' + str(ele) +
                             '\n' + '--Count: ' + str(count_per_class[counter - 1]))
             counter += 1
 
