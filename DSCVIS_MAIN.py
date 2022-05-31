@@ -207,14 +207,17 @@ class Ui(QtWidgets.QMainWindow):
 
         self.data.positions = []
 
+        # draw PC plot
         if self.pc_checked.isChecked():
             self.data.plot_type = 'PC'
             self.plot_widget = PLOT_CONTEXT.MakePlot(self.data, parent=self)
 
+        # draw DSC1 plot
         if self.dsc1_checked.isChecked():
             self.data.plot_type = 'DSC1'
             self.plot_widget = PLOT_CONTEXT.MakePlot(self.data, parent=self)
 
+        # draw DSC2 plot
         if self.dsc2_checked.isChecked():
             if self.data.attribute_count % 2 != 0:
                 print('This plot requires an even feature count.')
@@ -222,6 +225,7 @@ class Ui(QtWidgets.QMainWindow):
             self.data.plot_type = 'DSC2'
             self.plot_widget = PLOT_CONTEXT.MakePlot(self.data, parent=self)
 
+        # draw SPC plot
         if self.spc_checked.isChecked():
             if self.data.attribute_count % 2 != 0:
                 print('This plot requires an even feature count.')
@@ -229,11 +233,13 @@ class Ui(QtWidgets.QMainWindow):
             self.data.plot_type = 'SPC'
             self.plot_widget = PLOT_CONTEXT.MakePlot(self.data, parent=self)
 
+        # class table placeholder
         if self.class_pl_exists:
             self.class_table_layout.removeWidget(self.class_pl)
             self.class_table_layout.addWidget(self.class_table)
             self.class_pl_exists = False
 
+        # attribute table placeholder
         if self.attribute_pl_exists:
             self.attribute_table_layout.removeWidget(self.attribute_pl)
             self.attribute_pl_exists = False
@@ -243,6 +249,7 @@ class Ui(QtWidgets.QMainWindow):
         self.attribute_table = ATTRIBUTE_TABLE.AttributeTable(self.data, parent=self)
         self.attribute_table_layout.addWidget(self.attribute_table)
 
+        # plot placeholder
         if self.pl_exists:
             self.plot_layout.removeWidget(self.pl)
             self.pl_exists = False

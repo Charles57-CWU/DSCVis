@@ -73,6 +73,7 @@ def clip_files(dataset, textbox):
     csv_writer_train3.writerow(np.append(np.array(dataset.attribute_names), 'class'))
     csv_writer_test3.writerow(np.append(np.array(dataset.attribute_names), 'class'))
 
+    # build files
     for i in range(dataset.sample_count):
         if dataset.clipped_samples[i]:
             csv_writer_test1.writerow(np.array(dataset.dataframe.iloc[[i]].squeeze()))
@@ -98,6 +99,7 @@ def clip_files(dataset, textbox):
     output_train3.close()
     output_test3.close()
 
+    # build text box
     clip_display(textbox, dataset.sample_count)
 
 
@@ -130,7 +132,7 @@ def compute_code(x, y, min_max):
     return code
 
 
-def cohen_sutherland_clip(x1, y1, x2, y2, min_max):
+def cohen_sutherland_clip(x1, y1, x2, y2, min_max, class_num, sample_num):
     # Compute region codes for P1, P2
     code1 = compute_code(x1, y1, min_max)
     code2 = compute_code(x2, y2, min_max)
@@ -181,7 +183,7 @@ def cohen_sutherland_clip(x1, y1, x2, y2, min_max):
                 code2 = compute_code(x2, y2, min_max)
 
     if accept:
-        # print("Line accepted from %.2f, %.2f to %.2f, %.2f" % (x1, y1, x2, y2))
+        # print('Sample: ' + str(sample_num) + ' in class: ' + str(class_num) + ' accepted from %.2f, %.2f to %.2f, %.2f' % (x1, y1, x2, y2))
         return True
     else:
         # print("Line rejected")
@@ -203,13 +205,19 @@ def clip_samples(positions, rect, dataset):
     min_max.y_max = max(rect[1], rect[3])
 
     cnt = 0
+    class_num = 1
+    # check each class
     for data_class in positions:
+
+        # check each sample in the class
         for sample in data_class:
+
+            # check each polyline in the line
             for i in range(dataset.vertex_count):
                 # line clip
                 if i < dataset.vertex_count - 1:
                     is_clipped = cohen_sutherland_clip(sample[2 * i], sample[2 * i + 1], sample[2 * i + 2],
-                                                       sample[2 * i + 3], min_max)
+                                                       sample[2 * i + 3], min_max, class_num, cnt)
                     if is_clipped:
                         dataset.clipped_samples[cnt] = True
 
@@ -218,12 +226,13 @@ def clip_samples(positions, rect, dataset):
                     if is_inside:
                         dataset.vertex_in[cnt] = True
                 else:
-                    # last vertex (and vertex) clip
+                    # last vertex clip (also checks generic vertex clip on last vertex)
                     is_inside = vertex_check(sample[2 * i], sample[2 * i + 1], min_max)
                     if is_inside:
                         dataset.vertex_in[cnt] = True
                         dataset.last_vertex_in[cnt] = True
             cnt += 1
+        class_num += 1
 
 
 class Clipping:
