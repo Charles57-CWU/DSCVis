@@ -9,10 +9,15 @@ class GetData:
     def __init__(self, dataset, filename):
         # store dataset into dataframe
         df = pd.read_csv(filename)
-        class_column_name = 'class'
 
         # get dataset name
         dataset.name = os.path.basename(filename)
+
+        # make even attributes
+        if (len(df.columns) - 1) % 2 == 1:
+            df['Dupe-x' + str(len(df.columns) - 1)] = df.iloc[:, len(df.columns) - 1]
+
+        # put class column to end of dataframe
         df.insert(len(df.columns) - 1, 'class', df.pop('class'))
 
         # get class information
