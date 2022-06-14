@@ -19,7 +19,7 @@ class DSC2Info:
             working_df[working_df.columns[i]] = scaler.fit_transform(working_df[[working_df.columns[i]]])
 
         # space = 1.0 / dataset.vertex_count
-        space_array = np.repeat(0.03, repeats=dataset.attribute_count)
+        space_array = np.repeat(0.05, repeats=dataset.attribute_count)
         # for i in range(dataset.attribute_count):
         #     if i % 2 == 1:
         #         space_array[i] = 0.005

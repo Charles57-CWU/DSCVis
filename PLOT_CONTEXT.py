@@ -41,7 +41,7 @@ def drawPolyLines(dataset, class_vao):
             color = dataset.class_colors[i]
             glColor3ub(color[0], color[1], color[2])
             # draw polyline
-            for j in range(0, len(dataset.positions[i]), dataset.vertex_count):
+            for j in range(0, len(dataset.positions[dataset.class_order[i]]), dataset.vertex_count):
                 glDrawArrays(GL_LINE_STRIP, j, dataset.vertex_count)
 
             # ============================special =============================================================
@@ -68,7 +68,7 @@ def drawMarkers(dataset, marker_vao):
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
     for i in range(dataset.class_count):
         # check if active
-        if dataset.active_markers[i]:
+        if dataset.active_markers[dataset.class_order[i]]:
             # positions of the markers
             for j in range(dataset.vertex_count):
                 if j == dataset.vertex_count - 1:
@@ -82,7 +82,7 @@ def drawMarkers(dataset, marker_vao):
                 else:
                     glColor4ub(color[0], color[1], color[2], 255)
                 # drawing
-                glDrawArrays(GL_POINTS, 0, int(len(dataset.positions[i]) / dataset.vertex_count))
+                glDrawArrays(GL_POINTS, 0, int(len(dataset.positions[dataset.class_order[i]]) / dataset.vertex_count))
                 # unbind
                 glBindVertexArray(0)
                 glPointSize(5)
