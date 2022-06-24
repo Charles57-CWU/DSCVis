@@ -29,6 +29,7 @@ Python 3.9
 
 PyOpenGL 3.1.5
 
+PyQt5-sip <- install this first on anaconda. (Not needed on Pycharm)
 PyQt5 5.15.6
 
 numpy 1.21.4
